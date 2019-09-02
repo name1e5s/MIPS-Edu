@@ -19,25 +19,14 @@ module mem_memory(
         input [31:0]                mem_rdata,
 
         output logic [31:0]         result,
-        output logic                address_error
+        output logic                stall
 );
 
-    assign mem_en   = |mem_type && (~address_error);
+    assign mem_en   = |mem_type;
     assign mem_addr = address;
 
-    always_comb begin : detect_alignment_error
-        if(mem_type != `MEM_NOOP) begin
-            unique case(mem_size)
-            `SZ_HALF:
-                address_error = address[0];
-            `SZ_FULL:
-                address_error = |address[1:0];
-            default:
-                address_error = 1'b0;
-            endcase
-        end
-        else
-            address_error = 1'b0;
+    always_ff @(posedge clk) begin
+        stall <= ~stall && mem_type == `MEM_LOAD;
     end
 
     // Read or write
@@ -45,10 +34,7 @@ module mem_memory(
         result = address;
         mem_wen = 4'b0;
         mem_wdata = rt_value;
-        if(address_error) begin
-        // We do noting when align error
-        end
-        else begin
+        begin
             if(mem_type == `MEM_STOR) begin
                 unique case(mem_size)
                 `SZ_FULL:
