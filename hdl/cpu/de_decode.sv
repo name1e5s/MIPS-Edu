@@ -22,7 +22,7 @@ module decoder_ctrl(
         output logic [4:0] 			wb_reg_dest,    // Destination register address
         output logic       			wb_reg_en,      // Writeback is enabled
         output logic       			unsigned_flag,  // Is this a unsigned operation in MEM stage.
-        output logic                priv_inst       // Is this instruction a priv inst?
+        output logic                priv_inst       // Is this instruction a privileged inst?
 );
 
     // Control logic.
