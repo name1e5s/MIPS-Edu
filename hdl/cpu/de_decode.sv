@@ -69,8 +69,6 @@ module decoder_ctrl(
             {6'b001011, 6'bxxxxxx}: // SLTIU
                 {alu_op, alu_src, alu_imm_src, mem_type, mem_size, wb_reg_dest, wb_reg_en, unsigned_flag} = 
                     {`ALU_SLTU, `SRC_IMM, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, rt, 1'b1, `ZERO_EXTENDED};
-            // NO MULT/DIV OPERATION FOR NOW...
-            /*
             {6'b000000, 6'b011010}: // DIV
                 {alu_op, alu_src, alu_imm_src, mem_type, mem_size, wb_reg_dest, wb_reg_en, unsigned_flag} = 
                     {`ALU_DIV, `SRC_REG, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, rd, 1'b0, `ZERO_EXTENDED};
@@ -83,7 +81,6 @@ module decoder_ctrl(
             {6'b000000, 6'b011001}: // MULTU
                 {alu_op, alu_src, alu_imm_src, mem_type, mem_size, wb_reg_dest, wb_reg_en, unsigned_flag} = 
                     {`ALU_MULTU, `SRC_REG, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, rd, 1'b0, `ZERO_EXTENDED};
-            */
             {6'b000000, 6'b100100}: // AND
                 {alu_op, alu_src, alu_imm_src, mem_type, mem_size, wb_reg_dest, wb_reg_en, unsigned_flag} = 
                     {`ALU_AND, `SRC_REG, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, rd, 1'b1, `ZERO_EXTENDED};
