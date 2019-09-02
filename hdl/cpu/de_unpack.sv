@@ -10,7 +10,6 @@ module de_unpack(
         output logic [4:0]          shamt,
         output logic [5:0]          funct,
         output logic [15:0]         immed,
-        output logic [25:0]         instr_index,
 
         output logic [2:0]          branch_type,
         output logic                is_branch_instr,
@@ -24,7 +23,6 @@ module de_unpack(
     assign shamt        = instruction[10:6];
     assign funct        = instruction[5:0];
     assign immed        = instruction[15:0];
-    assign instr_index  = instruction[25:0];
 
     // Check if the instruction is a branch/jump function
     always_comb begin
