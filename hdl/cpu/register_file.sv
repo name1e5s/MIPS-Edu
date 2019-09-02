@@ -18,18 +18,14 @@ module register_file(
     reg [31:0] _register[0:31];
 
 	always_comb begin : read_data_a
-		if(raddr_a == 5'b00000)
-			rdata_a = 32'h0000_0000;
-		else if(wen && waddr == raddr_a)
+        if(wen && waddr == raddr_a)
 			rdata_a = wdata;
 		else
 			rdata_a = _register[raddr_a];
 	end
 
 	always_comb begin : read_data_b
-		if(raddr_b == 5'b00000)
-			rdata_b = 32'h0000_0000;
-		else if(wen && waddr == raddr_b)
+        if(wen && waddr == raddr_b)
 			rdata_b = wdata;
 		else
 			rdata_b = _register[raddr_b];

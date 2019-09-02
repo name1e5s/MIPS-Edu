@@ -9,9 +9,6 @@ module if_pc(
     input                   branch_taken,
     input [31:0]            branch_address,
 
-    input                   exception_taken,
-    input [31:0]            exception_address,
-
     output logic [31:0]     pc_address
 );
 
@@ -22,9 +19,7 @@ module if_pc(
             pc_address_next = 32'hbfc0_0000;
         end
         else if(pc_en) begin
-            if(exception_taken)
-                pc_address_next = exception_address;
-            else if(branch_taken)
+            if(branch_taken)
                 pc_address_next = branch_address;
             else
                 pc_address_next = pc_address + 32'd4;

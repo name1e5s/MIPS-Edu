@@ -3,15 +3,14 @@
 `include "common.vh"
 `include "alu_op.vh"
 
-// Alpha and Beta shares the same ctrl signal.
-module decoder_ctrl(
+module de_decode(
         input [31:0]				instruction,
         input [5:0]					opcode,
         input [4:0]					rt,
         input [4:0]					rd,
         input [5:0]					funct,
         input						is_branch,
-        input						is_branch_al,
+        input						is_branch_link,
 
         output logic				undefined_inst, // 1 as received a unknown operation.
         output logic [5:0]	 		alu_op,         // ALU operation code
@@ -182,7 +181,7 @@ module decoder_ctrl(
                         {`ALU_MTC0, `SRC_REG, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, rt, 1'b0, `ZERO_EXTENDED};
             end
             default: begin
-                if(is_branch && is_branch_al)
+                if(is_branch && is_branch_link)
                     {alu_op, alu_src, alu_imm_src, mem_type, mem_size, wb_reg_dest, wb_reg_en, unsigned_flag} = 
                         {`ALU_OUTA, `SRC_PCA, `SIGN_EXTENDED, `MEM_NOOP, `SZ_FULL, 5'd31, 1'b1, `ZERO_EXTENDED};
                 else begin

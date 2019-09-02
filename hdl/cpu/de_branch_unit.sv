@@ -3,7 +3,6 @@
 `include "common.vh"
 
 module de_branch_unit(
-        input                       en,
         input [31:0]                pc_address,
         input [31:0]                instruction,
         input                       is_branch_instr,
@@ -25,10 +24,7 @@ module de_branch_unit(
     end
 
     always_comb begin : take_branch
-        if(!en) begin
-            branch_taken = 1'b0;
-            branch_address = 32'h0000_0000;
-        end else if(is_branch_instr) begin
+        if(is_branch_instr) begin
             unique case(branch_type)
             `B_EQNE:
                 unique case(instruction[27:26])
