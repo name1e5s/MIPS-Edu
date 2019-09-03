@@ -33,7 +33,7 @@ module register_file(
 
     always_ff @(posedge clk) begin : write_data
         if(rst) begin
-            for(int i = 0; i < 31; i++)
+            for(int i = 0; i < 32; i++)
                 _register[i] <= 32'h0000_0000;
         end
         else if(wen) begin
