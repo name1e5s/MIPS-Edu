@@ -12,9 +12,8 @@ module ex_alu(
         output logic [31:0]         result
 );
 
-    wire [63:0] 			     hilo       = src_hilo;
-    wire [31:0] 			     hi         = hilo[63:32];
-    wire [31:0] 			     lo         = hilo[31:0];
+    logic exp_overflow;
+
     wire [31:0] 			     add_result = src_a + src_b;
     wire [31:0] 			     sub_result = src_a - src_b;
 
@@ -45,18 +44,10 @@ module ex_alu(
                 result = $signed(src_b) >>> src_a[4:0];
             `ALU_SRL:
                 result = src_b >> src_a[4:0];
-            `ALU_MFHI:
-                result = hi;
-            `ALU_MFLO:
-                result = lo;
             `ALU_OUTA:
                 result = src_a;
             `ALU_OUTB:
                 result = src_b;
-            `ALU_MFC0:
-                result = cop0_data;
-            `ALU_MTC0:
-                result = cop0_addr;
             default:
                 result = 32'h0000_0000; // Prevent dcache error
         endcase

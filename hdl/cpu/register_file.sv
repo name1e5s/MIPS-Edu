@@ -12,7 +12,7 @@ module register_file(
 
 		input 						wen,
 		input [4:0]					waddr,
-		input [31:0]				wdata,
+		input [31:0]				wdata
 );
 
     reg [31:0] _register[0:31];

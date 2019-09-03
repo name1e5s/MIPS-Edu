@@ -2,12 +2,12 @@
 
 module de_bypass(
     input                   ex_reg_en,
-    input  [5:0]            ex_reg_addr,
+    input  [4:0]            ex_reg_addr,
     input  [31:0]           ex_reg_data,
     input                   mem_reg_en,
-    input  [5:0]            mem_reg_addr,
+    input  [4:0]            mem_reg_addr,
     input  [31:0]           mem_reg_data,
-    input  [5:0]            id_reg_addr,
+    input  [4:0]            id_reg_addr,
     input  [31:0]           id_reg_data,
     output logic [31:0]     reg_value
 );

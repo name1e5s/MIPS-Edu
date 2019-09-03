@@ -23,10 +23,13 @@ module mem_memory(
 );
 
     assign mem_en   = |mem_type;
-    assign mem_addr = address;
+    assign mem_addr = {3'd0, address[28:0]};
+
+    logic stall_prev;
+    assign stall = ~stall_prev && mem_type == `MEM_LOAD;
 
     always_ff @(posedge clk) begin
-        stall <= ~stall && mem_type == `MEM_LOAD;
+        stall_prev <= stall;
     end
 
     // Read or write

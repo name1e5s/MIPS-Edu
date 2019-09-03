@@ -6,7 +6,7 @@ module control(
     input [4:0]                 id_rt,
 
     input [4:0]                 ex_reg_dest,
-    input                       ex_mem_type,
+    input [1:0]                 ex_mem_type,
 
     input                       mem_stall,
 

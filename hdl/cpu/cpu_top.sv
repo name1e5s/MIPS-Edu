@@ -12,7 +12,6 @@ module cpu_top(
     input [31:0]            data_rdata
 );
 
-
     // CONTROL SIGNALS
     wire        if_id_en, id_ex_en, ex_mem_en, mem_wb_en;
 
@@ -23,7 +22,7 @@ module cpu_top(
     wire [5:0]  id_opcode;
     wire [4:0]  id_rs, id_rt, id_rd, id_shamt;
     wire [5:0]  id_funct;
-    wire [16:0] id_immed;
+    wire [15:0] id_immed;
     wire [2:0]  id_branch_type;
     wire        id_is_branch;
     wire        id_is_branch_link;
@@ -118,6 +117,9 @@ module cpu_top(
 
     reg         mem_wb_is_branch_link;
 
+    // OUTPUT SIGNAL
+    assign inst_addr = if_id_en? if_pc_address : if_id_pc_address;
+
     control control(
         .id_rs              (id_rs),
         .id_rt              (id_rt),
@@ -200,7 +202,7 @@ module cpu_top(
         .ex_reg_data        (ex_result),
         .mem_reg_en         (ex_mem_wb_reg_en),
         .mem_reg_addr       (ex_mem_wb_reg_dest),
-        .mem_reg_data       (ex_mem_result),
+        .mem_reg_data       (mem_result),
         .id_reg_addr        (id_rs),
         .id_reg_data        (id_rs_value_raw),
         .reg_value          (id_rs_value)
@@ -212,7 +214,7 @@ module cpu_top(
         .ex_reg_data        (ex_result),
         .mem_reg_en         (ex_mem_wb_reg_en),
         .mem_reg_addr       (ex_mem_wb_reg_dest),
-        .mem_reg_data       (ex_mem_result),
+        .mem_reg_data       (mem_result),
         .id_reg_addr        (id_rt),
         .id_reg_data        (id_rt_value_raw),
         .reg_value          (id_rt_value)
@@ -259,7 +261,7 @@ module cpu_top(
             id_ex_rt            <= 5'd0;
             id_ex_alu_op        <= 6'd0;
             id_ex_mem_type      <= `MEM_NOOP;
-            id_ex_mem_size      <= `MEM_FULL;
+            id_ex_mem_size      <= `SZ_FULL;
             id_ex_wb_reg_dest   <= 5'd0;
             id_ex_wb_reg_en     <= 1'd0;
             id_ex_unsigned_flag <= 1'd0;
@@ -269,7 +271,7 @@ module cpu_top(
             id_ex_rt_value      <= 32'd0;
         end
         else if(id_ex_en) begin
-            id_ex_pc_address    <= if_id_pc_address + 32'd4;
+            id_ex_pc_address    <= if_id_pc_address;
             id_ex_rt            <= id_rt;
             id_ex_alu_op        <= id_alu_op;
             id_ex_mem_type      <= id_mem_type;
@@ -293,12 +295,12 @@ module cpu_top(
         .result                 (ex_result)
     );
 
-    always_ff @(posedge clk) begin : id_ex
+    always_ff @(posedge clk) begin : ex_mem
         if(rst || (!ex_mem_en && mem_wb_en)) begin
             ex_mem_pc_address       <= 32'd0;
             ex_mem_is_branch_link   <= 1'd0;
             ex_mem_mem_type         <= `MEM_NOOP;
-            ex_mem_mem_size         <= `MEM_FULL;
+            ex_mem_mem_size         <= `SZ_FULL;
             ex_mem_wb_reg_dest      <= 5'd0;
             ex_mem_wb_reg_en        <= 1'd0;
             ex_mem_unsigned_flag    <= 1'd0;
@@ -335,18 +337,20 @@ module cpu_top(
         .stall                  (mem_stall)
     );
 
-    always_ff @(posedge clk) begin : id_ex
+    always_ff @(posedge clk) begin : mem_wb
         if(rst) begin
-            mem_wb_pc_address   <= 32'd0;
-            mem_wb_result       <= 32'd0;
-            mem_wb_reg_dest     <= 5'd0;
-            mem_wb_reg_en       <= 1'd0;
+            mem_wb_pc_address       <= 32'd0;
+            mem_wb_result           <= 32'd0;
+            mem_wb_reg_dest         <= 5'd0;
+            mem_wb_reg_en           <= 1'd0;
+            mem_wb_is_branch_link   <= 1'd0;
         end
         else if(mem_wb_en) begin
-            mem_wb_pc_address   <= ex_mem_pc_address;
-            mem_wb_result       <= mem_result;
-            mem_wb_reg_dest     <= mem_wb_reg_dest;
-            mem_wb_reg_en       <= mem_wb_reg_en;
+            mem_wb_pc_address       <= ex_mem_pc_address;
+            mem_wb_result           <= mem_result;
+            mem_wb_reg_dest         <= ex_mem_wb_reg_dest;
+            mem_wb_reg_en           <= ex_mem_wb_reg_en;
+            mem_wb_is_branch_link   <= ex_mem_is_branch_link;
         end
     end
 
