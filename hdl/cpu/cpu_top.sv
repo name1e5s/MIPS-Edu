@@ -2,7 +2,6 @@ module cpu_top(
     input                   clk,
     input                   rst,
 
-    output logic            inst_en,
     output logic [31:0]     inst_addr,
     input  [31:0]           inst_data,
 
@@ -13,8 +12,8 @@ module cpu_top(
     input [31:0]            data_rdata
 );
 
+
     // CONTROL SIGNALS
-    wire        flush;
     wire        if_id_en, id_ex_en, ex_mem_en, mem_wb_en;
 
     // IF SIGNALS
