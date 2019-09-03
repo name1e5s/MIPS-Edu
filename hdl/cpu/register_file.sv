@@ -4,7 +4,7 @@ module register_file(
         input                       clk,
         input                       rst,
 
-        input [4:0]	                raddr_a,
+        input [4:0]                 raddr_a,
         output logic [31:0]         rdata_a,
 
         input [4:0]                 raddr_b,
