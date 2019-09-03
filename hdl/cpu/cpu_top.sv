@@ -94,8 +94,6 @@ module cpu_top(
     reg  [31:0] id_ex_alu_src_a;
     reg  [31:0] id_ex_alu_src_b;
 
-    reg         id_ex_is_inst;
-
     reg  [31:0] id_ex_rt_value;
 
     // EX-MEM REGISTERS
@@ -120,6 +118,18 @@ module cpu_top(
     reg         mem_wb_reg_en;
 
     reg         mem_wb_is_branch_link;
+
+    control control(
+        .id_rs              (id_rs),
+        .id_rt              (id_rt),
+        .ex_reg_dest        (id_ex_wb_reg_dest),
+        .ex_mem_type        (id_ex_mem_type),
+        .mem_stall          (mem_stall),
+        .if_id_en           (if_id_en),
+        .id_ex_en           (id_ex_en),
+        .ex_mem_en          (ex_mem_en),
+        .mem_wb_en          (mem_wb_en)
+    );
 
     register_file register_file(
         .clk                (clk),
