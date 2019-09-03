@@ -5,12 +5,12 @@
 
 module de_decode(
         input [31:0]				instruction,
-        input [5:0]					opcode,
-        input [4:0]					rt,
-        input [4:0]					rd,
-        input [5:0]					funct,
-        input						is_branch,
-        input						is_branch_link,
+        input [5:0]                 opcode,
+        input [4:0]                 rt,
+        input [4:0]                 rd,
+        input [5:0]                 funct,
+        input                       is_branch,
+        input                       is_branch_link,
 
         output logic				undefined_inst, // 1 as received a unknown operation.
         output logic [5:0]	 		alu_op,         // ALU operation code
