@@ -16,6 +16,12 @@ module soc_top(
     output logic [6:0]      seg_a_g_1,
     output logic [3:0]      seg_sel_1
 );
+    wire real_clk;
+
+    clk_wiz0 clk_wiz(
+        .clk_in1        (clk),
+        .clk_out1       (real_clk)
+    );
 
     wire [31:0]         cpu_inst_addr;
     wire [31:0]         cpu_inst_data;
@@ -27,7 +33,7 @@ module soc_top(
     wire [31:0]         cpu_data_rdata;
 
     cpu_top cpu(
-        .clk            (clk),
+        .clk            (real_clk),
         .rst            (rst),
         .inst_addr      (cpu_inst_addr),
         .inst_data      (cpu_inst_data),
@@ -51,7 +57,7 @@ module soc_top(
 	wire [31:0]         data_rdata;
 
     bridge bridge_0(
-        .clk            (clk),
+        .clk            (real_clk),
         .rst            (rst),
         .bridge_en      (cpu_data_en),
         .bridge_wen     (cpu_data_wen),
@@ -71,7 +77,7 @@ module soc_top(
     );
 
     confreg confreg_0(
-        .clk            (clk),
+        .clk            (real_clk),
         .rst            (rst),
         .conf_en        (conf_en),
         .conf_wen       (conf_wen),
