@@ -6,6 +6,7 @@
 `define SWITCH_ADDR         16'h000c    
 `define SWITCH_DIP_ADDR     16'h0010
 `define VUART_ADDR          16'h0014
+`define SWITCH_IN_ADDR      16'h0018
 
 module confreg(
     input                   clk,
@@ -41,6 +42,11 @@ module confreg(
     assign led_lo = led_lo_data[15:0];
 
     logic [31:0] conf_rdata_next;
+    wire [31:0] sw_in_data = {16'd0,
+                        ~switch[7],1'b0,~switch[6],1'b0,
+                        ~switch[5],1'b0,~switch[4],1'b0,
+                        ~switch[3],1'b0,~switch[2],1'b0,
+                        ~switch[1],1'b0,~switch[0],1'b0};
 
     always_ff @(posedge clk) begin
         if(rst) begin
@@ -52,7 +58,7 @@ module confreg(
     end
 
     always_comb begin
-        unique case(conf_addr)
+        unique case(conf_addr[15:0])
             `LED_LO_ADDR:
                 conf_rdata_next = led_lo_data;
             `LED_HI_ADDR:
@@ -63,6 +69,8 @@ module confreg(
                 conf_rdata_next = {24'd0, switch};
             `SWITCH_DIP_ADDR:
                 conf_rdata_next = {24'd0, switch_dip};
+            `SWITCH_IN_ADDR:
+                conf_rdata_next = sw_in_data;
             default:
                 conf_rdata_next = 32'd0;
         endcase
@@ -75,24 +83,26 @@ module confreg(
             num_data    <= 32'd0;
         end
         else if(conf_en && conf_wen != 4'd0) begin
-            unique case(conf_addr)
+            unique case(conf_addr[15:0])
             `LED_LO_ADDR:
                 led_lo_data <= conf_wdata;
             `LED_HI_ADDR:
                 led_hi_data <= conf_wdata;
             `NUM_ADDR:
                 num_data    <= conf_wdata;
+            default: begin
+            end
             endcase
         end
     end
 
     wire [7:0]  write_uart_data     = conf_wdata[7:0];
-    wire        write_uart_valid    = (conf_en && (conf_wen != 4'd0)) & (conf_addr[15:0]==`V_UART_ADDR);
+    wire        write_uart_valid    = (conf_en && (conf_wen != 4'd0)) & (conf_addr[15:0]==`VUART_ADDR);
 
     seven_segment seven_segment_0(
         .clk        (clk),
         .rst        (rst),
-        .data       (led_lo_data[15:0]),
+        .data       (num_data[31:16]),
         .seg_a_g    (seg_a_g_0),
         .seg_sel    (seg_sel_0)
     );
@@ -100,7 +110,7 @@ module confreg(
     seven_segment seven_segment_1(
         .clk        (clk),
         .rst        (rst),
-        .data       (led_hi_data[15:0]),
+        .data       (num_data[15:0]),
         .seg_a_g    (seg_a_g_1),
         .seg_sel    (seg_sel_1)
     );

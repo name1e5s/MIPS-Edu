@@ -9,8 +9,8 @@ LEAF(n56_bltzal_ds_test)
 ###test inst
     TEST_BLTZAL_DS(lui,   t0,0x800d)
     TEST_BLTZAL_DS(addiu, t1, t0, 0x8123)
-    TEST_BLTZAL_DS(sw,    t1, -0x7120(t0))
-    TEST_BLTZAL_DS(lw,    t2, -0x7120(t0))
+    TEST_BLTZAL_DS(sw,    t1, 0x7120(t0))
+    TEST_BLTZAL_DS(lw,    t2, 0x7120(t0))
     TEST_BLTZAL_DS(addu,  t3, t1, t2)
     TEST_BLTZAL_DS(or,    t4, s1, s2)
     TEST_BLTZAL_DS(slt,   t5, s2, s3)
@@ -35,12 +35,6 @@ LEAF(n56_bltzal_ds_test)
     TEST_BLTZAL_DS(srlv,  t8, t0, s0)
     lui t0, 0x8000
     li  t1, 0x00008000
-    TEST_BLTZAL_DS_MD(div    zero, t0, t1)
-    TEST_BLTZAL_DS_MD(divu   zero, t0, t1)
-    TEST_BLTZAL_DS_MD(mult   t0, t1)
-    TEST_BLTZAL_DS_MD(multu  t0, t1)
-    TEST_BLTZAL_DS(mfhi, t7)
-    TEST_BLTZAL_DS(mflo, t6)
 ###detect exception
     bne s2, zero, inst_error
     nop

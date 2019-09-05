@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module bridge #(parameter PREFIX=16'h1ffa) (
+module bridge #(parameter PREFIX=16'h1faf) (
     input                   clk,
     input                   rst,
 
@@ -54,7 +54,7 @@ module bridge #(parameter PREFIX=16'h1ffa) (
             data_wen    = bridge_wen;
         end
 
-        bridge_rdata    = (addr_prev == PREFIX) ? conf_rdata : data_rdata;
+        bridge_rdata    = (addr_prev[31:16] == PREFIX) ? conf_rdata : data_rdata;
 
     end
 

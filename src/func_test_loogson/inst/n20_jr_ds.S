@@ -6,11 +6,12 @@ LEAF(n20_jr_ds_test)
     .set noreorder
     addiu s0, s0 ,1
     li  s2, 0x00
+    addiu s3, s3, 1
 ###test inst
     TEST_JR_DS(lui,   t0,0x800d)
     TEST_JR_DS(addiu, t1, t0, 0x8123)
-    TEST_JR_DS(sw,    t1, -0x7120(t0))
-    TEST_JR_DS(lw,    t2, -0x7120(t0))
+    TEST_JR_DS(sw,    t1, 0x8020(t0))
+    TEST_JR_DS(lw,    t2, 0x8020(t0))
     TEST_JR_DS(addu,  t3, t1, t2)
     TEST_JR_DS(or,    t4, s1, s2)
     TEST_JR_DS(slt,   t5, s2, s3)

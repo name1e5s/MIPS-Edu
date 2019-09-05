@@ -15,7 +15,7 @@ module ram_wrapper(
 );
 
     blk_mem_gen_ram ram_impl(
-        .addra              (data_addr[16:2])
+        .addra              (data_addr[16:2]),
         .clka               (clk),
         .dina               (data_wdata),
         .douta              (data_rdata),

@@ -2,7 +2,7 @@
 
 module soc_top(
     input                   clk,
-    input                   rst,
+    input                   rst_n,
 
     input [7:0]             switch,
     input [7:0]             switch_dip,
@@ -17,8 +17,9 @@ module soc_top(
     output logic [3:0]      seg_sel_1
 );
     wire real_clk;
-
-    clk_wiz0 clk_wiz(
+    wire rst = ~rst_n;
+    
+    clk_wiz_0 clk_wiz(
         .clk_in1        (clk),
         .clk_out1       (real_clk)
     );
@@ -92,6 +93,18 @@ module soc_top(
         .seg_sel_0      (seg_sel_0),
         .seg_a_g_1      (seg_a_g_1),
         .seg_sel_1      (seg_sel_1)
+    );
+
+    ram_wrapper ram(
+        .clk            (real_clk),
+        .rst            (rst),
+        .inst_addr      (cpu_inst_addr),
+        .inst_data      (cpu_inst_data),
+        .data_en        (data_en),
+        .data_wen       (data_wen),
+        .data_addr      (data_addr),
+        .data_wdata     (data_wdata),
+        .data_rdata     (data_rdata)
     );
 
 endmodule

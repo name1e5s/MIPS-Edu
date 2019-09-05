@@ -1,0 +1,6 @@
+*.o
+*.a
+src/func_test_loogson/obj
+*.lds
+src/func_test_loogson/convert
+xilinx_ip/

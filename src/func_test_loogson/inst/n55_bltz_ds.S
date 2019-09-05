@@ -9,8 +9,8 @@ LEAF(n55_bltz_ds_test)
 ###test inst
     TEST_BLTZ_DS(lui,   t0,0x800d)
     TEST_BLTZ_DS(addiu, t1, t0, 0x8123)
-    TEST_BLTZ_DS(sw,    t1, -0x7120(t0))
-    TEST_BLTZ_DS(lw,    t2, -0x7120(t0))
+    TEST_BLTZ_DS(sw,    t1, 0x7120(t0))
+    TEST_BLTZ_DS(lw,    t2, 0x7120(t0))
     TEST_BLTZ_DS(addu,  t3, t1, t2)
     TEST_BLTZ_DS(or,    t4, s1, s2)
     TEST_BLTZ_DS(slt,   t5, s2, s3)
@@ -35,12 +35,6 @@ LEAF(n55_bltz_ds_test)
     TEST_BLTZ_DS(srlv,  t8, t0, s0)
     lui t0, 0x8000
     li  t1, 0x00008000
-    TEST_BLTZ_DS_MD(div    zero, t0, t1)
-    TEST_BLTZ_DS_MD(divu   zero, t0, t1)
-    TEST_BLTZ_DS_MD(mult   t0, t1)
-    TEST_BLTZ_DS_MD(multu  t0, t1)
-    TEST_BLTZ_DS(mfhi, t7)
-    TEST_BLTZ_DS(mflo, t6)
 ###detect exception
     bne s2, zero, inst_error
     nop

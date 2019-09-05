@@ -2,7 +2,7 @@
 #include <regdef.h>
 #include <cpu_cde.h>
 
-#define TEST_NUM 89
+#define TEST_NUM 55
 
 
 ##s0, number
@@ -268,16 +268,12 @@ ex_ret:
 locate:
 	.set noreorder
 
-    LI (a0, LED_RG1_ADDR)
-    LI (a1, LED_RG0_ADDR)
     LI (s1, NUM_ADDR)
 
     LI (t1, 0x0002)
     LI (t2, 0x0001)
     lui s3, 0
 
-    sw t1, 0(a0)
-    sw t2, 0(a1)
     sw s3, 0(s1)
 
     lui s0, 0          ## initial run number
@@ -338,8 +334,6 @@ kseg0_kseg1:
     jal n11_sll_test   #sll
     nop
     jal wait_1s
-    nop
-    jal n12_sw_test    #sw
     nop
     jal wait_1s
     nop
@@ -467,38 +461,6 @@ kseg0_kseg1:
     nop
     jal wait_1s
     nop
-    jal n44_div_test   #div
-    nop
-    jal wait_1s
-    nop
-    jal n45_divu_test   #divu
-    nop
-    jal wait_1s
-    nop
-    jal n46_mult_test   #mult
-    nop
-    jal wait_1s
-    nop
-    jal n47_multu_test   #multu
-    nop
-    jal wait_1s
-    nop
-    jal n48_mfhi_test   #mfhi
-    nop
-    jal wait_1s
-    nop
-    jal n49_mflo_test   #mflo
-    nop
-    jal wait_1s
-    nop
-    jal n50_mthi_test   #mthi
-    nop
-    jal wait_1s
-    nop
-    jal n51_mtlo_test   #mtlo
-    nop
-    jal wait_1s
-    nop
     jal n52_bgez_ds_test   #bgez delay slot
     nop
     jal wait_1s
@@ -551,147 +513,18 @@ kseg0_kseg1:
     nop
     jal wait_1s
     nop
-    jal n65_syscall_ex_test       #syscall
-    nop
-    jal wait_1s
-    nop
-    jal n66_break_ex_test       #break ex
-    nop
-    jal wait_1s
-    nop
-    jal n67_add_ov_ex_test      #add ov ex
-    nop
-    jal wait_1s
-    nop
-    jal n68_addi_ov_ex_test     #addi ov ex
-    nop
-    jal wait_1s
-    nop
-    jal n69_sub_ov_ex_test      #sub ov ex
-    nop
-    jal wait_1s
-    nop
-    jal n70_lw_adel_ex_test     #lw adel ex
-    nop
-    jal wait_1s
-    nop
-    jal n71_lh_adel_ex_test     #lh adel ex
-    nop
-    jal wait_1s
-    nop
-    jal n72_lhu_adel_ex_test    #lhu adel ex
-    nop
-    jal wait_1s
-    nop
-    jal n73_sw_ades_ex_test     #sw ades ex
-    nop
-    jal wait_1s
-    nop
-    jal n74_sh_ades_ex_test     #sh ades ex
-    nop
-    jal wait_1s
-    nop
-    jal n75_ft_adel_ex_test     #ft adel ex
-    nop
-    jal wait_1s
-    nop
-    jal n76_ri_ex_test          #ri ex
-    nop
-    jal wait_1s
-    nop
-    jal n77_soft_int_ex_test    #soft int ex
-    nop
-    jal wait_1s
-    nop
-    jal n78_beq_ds_ex_test      #beq ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n79_bne_ds_ex_test      #bne ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n80_bgez_ds_ex_test     #bgez ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n81_bgtz_ds_ex_test     #bgtz ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n82_blez_ds_ex_test     #blez ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n83_bltz_ds_ex_test     #bltz ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n84_bltzal_ds_ex_test   #bltzal ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n85_bgezal_ds_ex_test   #bgezal ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n86_j_ds_ex_test        #j ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n87_jal_ds_ex_test      #jal ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n88_jr_ds_ex_test       #jr ds ex
-    nop
-    jal wait_1s
-    nop
-    jal n89_jalr_ds_ex_test     #jalr ds ex
-    nop
-    jal wait_1s
-    nop
-###check io access
-    LI  (a0, IO_SIMU_ADDR)
-    LI  (t0, 0x1234)
-    sw   t0, 0(a0)
-    lw   t1, 0(a0)   //t1=0x12340000
-    sll  t0, t0, 16
-    bne  t0, t1, io_err
-    nop
-
-    LI  (t0, 0x56780000)
-    sw   t0, 0(a0)
-    srl  t0, t0, 16
-    lw   t1, 0(a0)   //t1=0x5678
-    bne  t0, t1, io_err
-    nop
-    b    test_end
-    nop
-io_err:
-    addiu s0, s0, 1
-    sw    s0, 0(s1)
 
 test_end:
     LI  (s0, TEST_NUM)
     beq s0, s3, 1f
     nop
 
-    LI (a0, LED_ADDR)
-	LI (a1, LED_RG1_ADDR)
-    LI (a2, LED_RG0_ADDR)
-	
-    LI (t1, 0x0002)
-    
-	sw zero, 0(a0)
-    sw t1, 0(a1)
-    sw t1, 0(a2)
     b  2f
     nop
 1:
-    LI (t1, 0x0001)
-    LI (a0, LED_RG1_ADDR)
-	LI (a1, LED_RG0_ADDR)
+    LI (t1, 0xffff)
+    LI (a0, LED_HI_ADDR)
+	LI (a1, LED_LO_ADDR)
     sw t1, 0(a0)
     sw t1, 0(a1)
 
