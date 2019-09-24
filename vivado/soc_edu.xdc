@@ -64,3 +64,4 @@ set_property -dict {PACKAGE_PIN K6 IOSTANDARD LVCMOS33} [get_ports {led_lo[4]}]
 set_property -dict {PACKAGE_PIN L1 IOSTANDARD LVCMOS33} [get_ports {led_lo[5]}]
 set_property -dict {PACKAGE_PIN M1 IOSTANDARD LVCMOS33} [get_ports {led_lo[6]}]
 set_property -dict {PACKAGE_PIN K3 IOSTANDARD LVCMOS33} [get_ports {led_lo[7]}]
+
